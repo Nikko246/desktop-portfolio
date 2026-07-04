@@ -1,0 +1,135 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body, html {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+/* Desktop Background */
+.desktop {
+    width: 100%;
+    height: calc(100% - 40px);
+    background: #4a5759; /* Mid-tone slate background */
+    position: relative;
+    padding: 20px;
+}
+
+/* Shortcut Icons */
+.icon {
+    width: 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    text-align: center;
+    padding: 10px;
+    border-radius: 4px;
+}
+
+.icon:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.icon-img {
+    font-size: 40px;
+    margin-bottom: 5px;
+}
+
+.icon-label {
+    color: white;
+    font-size: 13px;
+    text-shadow: 1px 1px 3px black;
+}
+
+/* App Window (Hidden by Default) */
+.window {
+    width: 400px;
+    height: 300px;
+    background: #f0f0f0;
+    border: 1px solid #666;
+    border-radius: 6px;
+    box-shadow: 0px 8px 24px rgba(0,0,0,0.3);
+    position: absolute;
+    top: 15%;
+    left: 25%;
+    display: none; /* Dynamic control via JS */
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 10;
+}
+
+/* Window Header Bar */
+.window-header {
+    background: #d4d4d4;
+    padding: 8px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: move; /* Shows user it can be dragged */
+    user-select: none;
+}
+
+.window-title {
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+}
+
+.win-btn {
+    width: 22px;
+    height: 22px;
+    border: 1px solid #999;
+    background: #e0e0e0;
+    cursor: pointer;
+    border-radius: 3px;
+    font-size: 11px;
+}
+
+.win-btn:hover {
+    background: #ff5f56;
+    color: white;
+}
+
+.window-body {
+    padding: 15px;
+    flex-grow: 1;
+    background: white;
+    color: #333;
+    overflow-y: auto;
+}
+
+/* Bottom Taskbar */
+.taskbar {
+    width: 100%;
+    height: 40px;
+    background: #202020;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 15px;
+    z-index: 100;
+}
+
+.start-btn {
+    background: #0078d7;
+    color: white;
+    border: none;
+    padding: 5px 15px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 3px;
+}
+
+.time {
+    color: white;
+    font-size: 13px;
+}
