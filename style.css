@@ -11,13 +11,32 @@ body, html {
     overflow: hidden;
 }
 
-/* Desktop Background */
+/* Animated Live Desktop Gradient Background */
 .desktop {
     width: 100%;
     height: calc(100% - 40px);
-    background: #4a5759; /* Mid-tone slate background */
     position: relative;
     padding: 20px;
+    
+    /* Define gradient colors */
+    background: linear-gradient(-45deg, #1e293b, #334155, #0f172a, #1e1b4b);
+    background-size: 400% 400%;
+    
+    /* Trigger the movement loop animation */
+    animation: gradientMovement 15s ease infinite;
+}
+
+/* The framework logic for shifting the background position coordinates */
+@keyframes gradientMovement {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
 }
 
 /* Shortcut Icons */
