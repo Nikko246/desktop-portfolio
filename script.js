@@ -1,64 +1,79 @@
-// 1. SELECTING HTML ELEMENTS
-const shortcut = document.getElementById('projects-shortcut');
-const appWindow = document.getElementById('projects-window');
-const closeBtn = document.getElementById('close-btn');
-const windowHeader = document.getElementById('window-header');
-const clockElement = document.getElementById('clock');
+// 1. OPENING WINDOWS ON DOUBLE CLICK
+const shortcuts = document.querySelectorAll('.icon');
+let highestZIndex = 10;
 
-// 2. OPEN AND CLOSE WINDOW LOGIC
-shortcut.addEventListener('click', () => {
-    appWindow.style.display = 'flex';
+shortcuts.forEach(shortcut => {
+    shortcut.addEventListener('dblclick', () => {
+        const windowId = shortcut.getAttribute('data-window');
+        const targetWindow = document.getElementById(windowId);
+        
+        if (targetWindow) {
+            targetWindow.style.display = 'flex';
+            bringToFront(targetWindow);
+        }
+    });
 });
 
-closeBtn.addEventListener('click', () => {
-    appWindow.style.display = 'none';
+// 2. CLOSING WINDOWS
+const closeButtons = document.querySelectorAll('.close');
+closeButtons.forEach(button => {
+    button.addEventListener('click', (e) => {
+        const targetWindow = e.target.closest('.window');
+        targetWindow.style.display = 'none';
+        
+        // Optional: Pause video if the video window is closed
+        const videoElement = targetWindow.querySelector('video');
+        if (videoElement) {
+            videoElement.pause();
+        }
+    });
 });
 
-// 3. DRAGGING WINDOW LOGIC
+// Helper function to stack the clicked window on top
+function bringToFront(windowElement) {
+    highestZIndex++;
+    windowElement.style.zIndex = highestZIndex;
+}
+
+// 3. UNIVERSAL DRAGGING LOGIC FOR ALL WINDOWS
+let activeWindow = null;
 let isDragging = false;
-let currentX;
-let currentY;
-let initialX;
-let initialY;
-let xOffset = 0;
-let yOffset = 0;
+let startX, startY, initialLeft, initialTop;
 
-windowHeader.addEventListener('mousedown', dragStart);
-document.addEventListener('mousemove', drag);
-document.addEventListener('mouseup', dragEnd);
-
-function dragStart(e) {
-    initialX = e.clientX - xOffset;
-    initialY = e.clientY - yOffset;
-    
-    // Only drag if clicking the header bar
-    if (e.target === windowHeader || windowHeader.contains(e.target)) {
+document.querySelectorAll('.window-header').forEach(header => {
+    header.addEventListener('mousedown', (e) => {
+        activeWindow = header.closest('.window');
+        bringToFront(activeWindow);
         isDragging = true;
-    }
-}
 
-function drag(e) {
-    if (isDragging) {
+        startX = e.clientX;
+        startY = e.clientY;
+        initialLeft = activeWindow.offsetLeft;
+        initialTop = activeWindow.offsetTop;
+        
         e.preventDefault();
-        currentX = e.clientX - initialX;
-        currentY = e.clientY - initialY;
+    });
+});
 
-        xOffset = currentX;
-        yOffset = currentY;
+document.addEventListener('mousemove', (e) => {
+    if (!isDragging || !activeWindow) return;
 
-        // Apply new CSS transform styles dynamically
-        appWindow.style.transform = `translate(${currentX}px, ${currentY}px)`;
-    }
-}
+    const dx = e.clientX - startX;
+    const dy = e.clientY - startY;
 
-function dragEnd() {
+    activeWindow.style.left = `${initialLeft + dx}px`;
+    activeWindow.style.top = `${initialTop + dy}px`;
+});
+
+document.addEventListener('mouseup', () => {
     isDragging = false;
-}
+    activeWindow = null;
+});
 
-// 4. LIVE CLOCK TASKBAR LOGIC
+// 4. LIVE TASKBAR CLOCK
 function updateClock() {
     const now = new Date();
-    clockElement.innerText = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    document.getElementById('clock').innerText = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 }
 setInterval(updateClock, 1000);
 updateClock();
